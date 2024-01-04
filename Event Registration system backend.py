@@ -20,8 +20,9 @@ def create_participants():
         Sno = int(input("Enter the serial number of the participant: "))
         Name = input("Enter the name of the participant: ")
         mobile = input("Enter the mobile number of the partcipant: ")
-        query = 'INSERT INTO participants values(%s, %s, %s)'
-        mycursor.execute(query, (Sno, Name, mobile))
+        event = input("Enter the event in which you'd like to take part in: ")
+        query = 'INSERT INTO participants values(%s, %s, %s,%s)'
+        mycursor.execute(query, (Sno, Name, mobile,event))
         mydb.commit()
 
 def create_attendees():
@@ -51,11 +52,24 @@ def show_events():
         print(event)
 
 def show_participants():
-    mycursor.execute("SELECT*from participants; ")
-    participants = mycursor.fetchall()
-    for participant in participants:
-        print(participant)
+    
+ try:
+        name = input("Enter mobile number to check the participants' details:  ").strip()[:20]
+        mycursor.execute("SELECT*FROM participants where mobile like %s", (name, ))
+        participants_details= mycursor.fetchall()
+        print("EXECUTING QUERY: ","SELECT*FROM participants where mobile like %s", (name, ))
 
+        if  participants_details:
+            print("participant details found: ")
+            for user in participants_details:
+                print(user)
+        
+        else:
+            print("Participant not found. Please register yourself first for the event to take part in it ")
+    
+    except Exception as e:
+        print("Error: ", e)
+        
 def show_attendees():
   try:
         name = input("Enter mobile number to check the user details: ").strip()[:20]
