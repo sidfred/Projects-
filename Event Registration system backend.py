@@ -57,17 +57,22 @@ def show_participants():
         print(participant)
 
 def show_attendees():
-    name = input("Enter mobile number to check user details: ")
-    mycursor.execute("SELECT * FROM participants WHERE mobile = %s", (name,))
-    user_details = mycursor.fetchall()
+  try:
+        name = input("Enter mobile number to check the user details: ").strip()[:20]
+        mycursor.execute("SELECT*from attendees where mobile like %s", (name, ))
+        user_details = mycursor.fetchall()
+        print("EXECUTING QUERY: ", "SELECT*FROM attendees where mobile like %s", (name, ))
 
-    if user_details:
-        print("User details found:")
-        for user in user_details:
-            print(user)
+        if user_details:
+            print("user details found: ")
+            for user in user_details:
+                print(user)
+        
+        else: 
+            print("user not found. Please register first")
 
-    else:
-        print("User not found. Please register first.")
+    except Exception as e:
+        print("Error: ", e)
 
 while True:
     print("\n\t-----------|EVENT REGISTRATION AND MANAGEMENT SYSTEM|-----------\t")
