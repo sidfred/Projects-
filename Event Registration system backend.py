@@ -32,8 +32,9 @@ def create_attendees():
         Name = input("Enter the name of the attendees: ")
         mobile = input("Enter the mobile number of the attendee: ")
         anyone_else = int(input("Enter the number of member(s) with the attendee if any:  "))
-        query = 'INSERT INTO attendees values (%s, %s, %s, %s)'
-        mycursor.execute(query, (Sno, Name, mobile, anyone_else))
+        Event_choice = input("Enter the event which you'd like to attend from the aboove list of events: ")
+        query = 'INSERT INTO attendees values (%s, %s, %s, %s,%s)'
+        mycursor.execute(query, (Sno, Name, mobile, anyone_else,Event_choice))
         mydb.commit()
 
 def update_ticket_availability():
