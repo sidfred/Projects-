@@ -6,12 +6,12 @@ mycursor = mydb.cursor()
 def create_events():
     n = int(input("Enter how many records you want to enter inside the table as the host of the event: "))
     for i in range(n):
-        Sno = int(input("Enter the serial number of the event: "))
+        Event_id = int(input("Enter the event id of the event: "))
         Event = input("Enter the name of the event: ") 
         scheduled_date = input("Enter the scheduled date: ") 
         tickets = input("Enter the total number of tickets available: ")
         query = 'INSERT INTO events values(%s, %s, %s, %s)'
-        mycursor.execute(query, (Sno,Event,scheduled_date,tickets))
+        mycursor.execute(query, (Event_id,Event,scheduled_date,tickets))
         mydb.commit()
 
 def create_participants():
