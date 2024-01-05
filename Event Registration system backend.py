@@ -26,16 +26,31 @@ def create_participants():
         mydb.commit()
 
 def create_attendees():
-    n = int(input("Enter the number of attendees' records you want to enter inside the database: "))
-    for i in range(n):
-        Sno = int(input("Enter the serial number of the attendees: "))
-        Name = input("Enter the name of the attendees: ")
-        mobile = input("Enter the mobile number of the attendee: ")
-        anyone_else = int(input("Enter the number of member(s) with the attendee if any:  "))
-        Event_choice = input("Enter the event which you'd like to attend from the aboove list of events: ")
-        query = 'INSERT INTO attendees values (%s, %s, %s, %s,%s)'
-        mycursor.execute(query, (Sno, Name, mobile, anyone_else,Event_choice))
-        mydb.commit()
+    try:
+        n = int(input("Enter the number of attendees' records you want to enter inside the database: "))
+        for i in range(n):
+            Sno = int(input("Enter the serial number of the attendee: "))
+            Name = input("Enter the name of the attendees: ")
+            mobile = input("Enter the mobile number of the attendee: ")
+            anyone_else =  int(input("Enter the number of attendees whether someone is there with you or not: "))
+            Event_choice = input("Enter the name of the event you'd like to attend: ")
+            mycursor.execute("SELECT tickets FROM events WHERE Event = %s", (Event_choice,))
+            event_info = mycursor.fetchone()
+
+            if event_info and int(event_info[0]) > 0:
+                query = 'INSERT INTO attendees VALUES (%s, %s, %s, %s, %s)'
+                values = (Sno, Name, mobile, anyone_else, Event_choice)  
+                mycursor.execute(query, values)
+                mydb.commit()
+                print("Registration successful for {}. Enjoy the event!".format(Name))
+                mycursor.execute("UPDATE events SET tickets = tickets - 1 WHERE Event = %s", (Event_choice,))
+                mydb.commit()
+
+            else:
+                print("Sorry, either the event '{}' does not exist or tickets are not available. Registration unsuccessful.".format(Event_choice))
+                
+    except Exception as e:
+        print("Error: ", e)
 
 def update_ticket_availability():
     Event = input("Enter the name of the event: ")
